@@ -1,0 +1,6 @@
+@AbacatePayTestApi_HostAddress = http://localhost:5156
+
+GET {{AbacatePayTestApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

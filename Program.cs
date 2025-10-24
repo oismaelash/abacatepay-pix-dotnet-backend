@@ -16,33 +16,6 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "API para testes do AbacatePay SDK"
     });
-
-    // Configurar Bearer Token para API Key
-    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-    {
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
-        Scheme = "bearer",
-        BearerFormat = "API Key",
-        Description = "AbacatePay API Key como Bearer Token"
-    });
-
-    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
-    {
-        {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-            {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference
-                {
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] {}
-        }
-    });
-
-    // Adicionar parâmetro global para Base URL
-    c.OperationFilter<GlobalBaseUrlOperationFilter>();
 });
 
 // Configure AbacatePay SDK

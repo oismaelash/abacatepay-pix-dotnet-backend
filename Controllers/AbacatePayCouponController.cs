@@ -32,7 +32,7 @@ public class AbacatePayCouponController : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            _logger.LogInformation("Creating coupon: {CouponCode}", request.Data?.Code);
+            _logger.LogInformation("Creating coupon: {CouponCode}", request.Code);
 
             var response = await _abacatePayClient.CreateCouponAsync(request);
             return Ok(response);

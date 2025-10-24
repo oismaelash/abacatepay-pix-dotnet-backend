@@ -77,24 +77,24 @@ public class AbacatePayPixController : ControllerBase
     /// <param name="pixQrCodeId">ID do PIX QRCode</param>
     /// <param name="request">Dados da simulação</param>
     /// <returns>Resultado da simulação</returns>
-    [HttpPost("qrcode/{pixQrCodeId}/simulate")]
-    public async Task<ActionResult<PixQrCodeResponse>> SimulatePixPayment(string pixQrCodeId, [FromBody] PixQrCodeSimulateRequest request)
+    [HttpPost("qrcode/simulate")]
+    public async Task<ActionResult<PixQrCodeData>> SimulatePixPayment([FromQuery] string id)
     {
         try
         {
-            if (string.IsNullOrEmpty(pixQrCodeId))
+            if (string.IsNullOrEmpty(id))
             {
                 return BadRequest(new { error = "PIX QRCode ID is required" });
             }
 
-            _logger.LogInformation("Simulating PIX payment for QRCode ID: {PixQrCodeId}", pixQrCodeId);
+            _logger.LogInformation("Simulating PIX payment for QRCode ID: {PixQrCodeId}", id);
 
-            var response = await _abacatePayClient.SimulatePixQrCodePaymentAsync(pixQrCodeId, request);
+            var response = await _abacatePayClient.SimulatePixQrCodePaymentAsync(id);
             return Ok(response);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error simulating PIX payment for ID: {PixQrCodeId}", pixQrCodeId);
+            _logger.LogError(ex, "Error simulating PIX payment for ID: {PixQrCodeId}", id);
             return StatusCode(500, new { error = ex.Message });
         }
     }

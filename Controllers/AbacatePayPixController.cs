@@ -47,26 +47,26 @@ public class AbacatePayPixController : ControllerBase
     /// <summary>
     /// Verifica o status de um PIX QRCode
     /// </summary>
-    /// <param name="pixQrCodeId">ID do PIX QRCode</param>
+    /// <param name="id">ID do PIX QRCode</param>
     /// <returns>Status do PIX QRCode</returns>
-    [HttpGet("qrcode/{pixQrCodeId}/status")]
-    public async Task<ActionResult<PixQrCodeStatusResponse>> CheckPixQrCodeStatus(string pixQrCodeId)
+    [HttpGet("qrcode/check-status")]
+    public async Task<ActionResult<PixQrCodeStatusResponse>> CheckPixQrCodeStatus([FromQuery] string id)
     {
         try
         {
-            if (string.IsNullOrEmpty(pixQrCodeId))
+            if (string.IsNullOrEmpty(id))
             {
                 return BadRequest(new { error = "PIX QRCode ID is required" });
             }
 
-            _logger.LogInformation("Checking PIX QRCode status for ID: {PixQrCodeId}", pixQrCodeId);
+            _logger.LogInformation("Checking PIX QRCode status for ID: {PixQrCodeId}", id);
 
-            var response = await _abacatePayClient.CheckPixQrCodeStatusAsync(pixQrCodeId);
+            var response = await _abacatePayClient.CheckPixQrCodeStatusAsync(id);
             return Ok(response);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error checking PIX QRCode status for ID: {PixQrCodeId}", pixQrCodeId);
+            _logger.LogError(ex, "Error checking PIX QRCode status for ID: {PixQrCodeId}", id);
             return StatusCode(500, new { error = ex.Message });
         }
     }

@@ -1,5 +1,3 @@
-using AbacatePayTestApi.Services;
-using AbacatePayTestApi.Swagger;
 using AbacatePay;
 using AbacatePay.Models;
 
@@ -22,9 +20,6 @@ builder.Services.AddSwaggerGen(c =>
 var abacatePayConfig = builder.Configuration.GetSection("AbacatePay").Get<AbacatePayConfig>() ?? new AbacatePayConfig();
 builder.Services.AddSingleton(abacatePayConfig);
 builder.Services.AddScoped<AbacatePayClient>();
-
-// Register custom AbacatePay service wrapper
-builder.Services.AddScoped<IAbacatePayService, AbacatePayService>();
 
 // Configure logging
 builder.Logging.ClearProviders();

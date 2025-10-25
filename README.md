@@ -2,6 +2,9 @@
 
 A test API to demonstrate integration with the AbacatePay SDK, focused on PIX operations and withdrawals.
 
+## Youtube
+https://youtu.be/3WFB9ukYRoc
+
 ## 📋 About the Project
 
 This project is a REST API developed in .NET 8 that serves as an example of integration with the AbacatePay SDK. The API provides endpoints for:

@@ -47,26 +47,26 @@ public class AbacatePayBillingController : ControllerBase
     /// <summary>
     /// Obtém detalhes de um billing
     /// </summary>
-    /// <param name="billingId">ID do billing</param>
+    /// <param name="id">ID do billing</param>
     /// <returns>Detalhes do billing</returns>
-    [HttpGet("{billingId}")]
-    public async Task<ActionResult<BillingResponse>> GetBilling(string billingId)
+    [HttpGet]
+    public async Task<ActionResult<BillingResponse>> GetBilling([FromQuery] string id)
     {
         try
         {
-            if (string.IsNullOrEmpty(billingId))
+            if (string.IsNullOrEmpty(id))
             {
                 return BadRequest(new { error = "Billing ID is required" });
             }
 
-            _logger.LogInformation("Getting billing with ID: {BillingId}", billingId);
+            _logger.LogInformation("Getting billing with ID: {BillingId}", id);
 
-            var response = await _abacatePayClient.GetBillingAsync(billingId);
+            var response = await _abacatePayClient.GetBillingAsync(id);
             return Ok(response);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting billing for ID: {BillingId}", billingId);
+            _logger.LogError(ex, "Error getting billing for ID: {BillingId}", id);
             return StatusCode(500, new { error = ex.Message });
         }
     }

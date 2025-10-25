@@ -46,10 +46,7 @@ public class AbacatePayCustomerController : ControllerBase
     /// <param name="baseUrl">Base URL do AbacatePay (opcional, usa a configuração padrão se não informado)</param>
     /// <returns>Informações do customer criado</returns>
     [HttpPost("create")]
-    public async Task<ActionResult<CustomerResponse>> CreateCustomer(
-        [FromBody] CustomerRequest request,
-        [FromHeader(Name = "Authorization")] string authorization,
-        [FromHeader(Name = "X-Base-Url")] string? baseUrl = null)
+    public async Task<ActionResult<CustomerResponse>> CreateCustomer([FromBody] CustomerRequest request)
     {
         try
         {
@@ -59,27 +56,8 @@ public class AbacatePayCustomerController : ControllerBase
             }
 
             _logger.LogInformation("Creating customer: {CustomerName}", request.Name);
-
-            // Extrair Bearer Token do header Authorization
-            string bearerToken;
-            if (string.IsNullOrEmpty(authorization))
-            {
-                return Unauthorized(new { error = "Header Authorization é obrigatório" });
-            }
             
-            if (!authorization.StartsWith("Bearer "))
-            {
-                return Unauthorized(new { error = "Formato inválido. Use: Bearer <api-key>" });
-            }
-            
-            bearerToken = authorization.Substring(7).Trim();
-            if (string.IsNullOrEmpty(bearerToken))
-            {
-                return Unauthorized(new { error = "API Key não pode estar vazia" });
-            }
-
-            var client = GetAbacatePayClient(bearerToken, baseUrl);
-            var response = await client.CreateCustomerAsync(request);
+            var response = await _abacatePayClient.CreateCustomerAsync(request);
             return Ok(response);
         }
         catch (Exception ex)
@@ -96,34 +74,13 @@ public class AbacatePayCustomerController : ControllerBase
     /// <param name="baseUrl">Base URL do AbacatePay (opcional, usa a configuração padrão se não informado)</param>
     /// <returns>Lista de customers</returns>
     [HttpGet("list")]
-    public async Task<ActionResult<List<CustomerResponse>>> ListCustomers(
-        [FromHeader(Name = "Authorization")] string authorization,
-        [FromHeader(Name = "X-Base-Url")] string? baseUrl = null)
+    public async Task<ActionResult<List<CustomerResponse>>> ListCustomers()
     {
         try
         {
             _logger.LogInformation("Listing all customers");
 
-            // Extrair Bearer Token do header Authorization
-            string bearerToken;
-            if (string.IsNullOrEmpty(authorization))
-            {
-                return Unauthorized(new { error = "Header Authorization é obrigatório" });
-            }
-            
-            if (!authorization.StartsWith("Bearer "))
-            {
-                return Unauthorized(new { error = "Formato inválido. Use: Bearer <api-key>" });
-            }
-            
-            bearerToken = authorization.Substring(7).Trim();
-            if (string.IsNullOrEmpty(bearerToken))
-            {
-                return Unauthorized(new { error = "API Key não pode estar vazia" });
-            }
-
-            var client = GetAbacatePayClient(bearerToken, baseUrl);
-            var response = await client.ListCustomersAsync();
+            var response = await _abacatePayClient.ListCustomersAsync();
             return Ok(response);
         }
         catch (Exception ex)
